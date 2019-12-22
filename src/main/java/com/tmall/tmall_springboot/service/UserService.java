@@ -24,6 +24,7 @@ public class UserService {
         return userDAO.findByName(name);
     }
 
+
     public Page4Navigator<User> list(int start, int size, int navigatePages){
         Sort sort = Sort.by(Sort.Direction.DESC, "id");
         Pageable pageable = PageRequest.of(start, size, sort);

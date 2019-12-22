@@ -24,6 +24,7 @@ public class Result {
         return new Result(FAIL_CODE,message,null);
     }
 
+
     public int getCode() {
         return code;
     }

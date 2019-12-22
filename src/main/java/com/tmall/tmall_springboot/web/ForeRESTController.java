@@ -48,6 +48,7 @@ public class ForeRESTController {
             return Result.fail(message);
         }
 
+
         user.setPassword(password);
         userService.add(user);
         return Result.success();
