@@ -24,6 +24,10 @@ public class UserService {
         return userDAO.findByName(name);
     }
 
+    public User get(String name, String password){
+        return userDAO.getByNameAndPassword(name, password);
+    }
+
 
     public Page4Navigator<User> list(int start, int size, int navigatePages){
         Sort sort = Sort.by(Sort.Direction.DESC, "id");
