@@ -4,6 +4,7 @@ import com.tmall.tmall_springboot.dao.OrderDAO;
 import com.tmall.tmall_springboot.dao.OrderItemDAO;
 import com.tmall.tmall_springboot.pojo.Order;
 import com.tmall.tmall_springboot.pojo.OrderItem;
+import com.tmall.tmall_springboot.pojo.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,6 +34,36 @@ public class OrderItemService {
         order.setTotal(total);
         order.setOrderItems(orderItems);
         order.setTotalNumber(totalNumber);
+    }
+
+    public void update(OrderItem orderItem) {
+        orderItemDAO.save(orderItem);
+    }
+
+    public void add(OrderItem orderItem) {
+        orderItemDAO.save(orderItem);
+    }
+    public OrderItem get(int id) {
+        return orderItemDAO.getOne(id);
+    }
+
+    public void delete(int id) {
+        orderItemDAO.deleteById(id);
+    }
+
+    public int getSaleCount(Product product) {
+        List<OrderItem> ois =listByProduct(product);
+        int result =0;
+        for (OrderItem oi : ois) {
+            if(null!=oi.getOrder())
+                if(null!= oi.getOrder() && null!=oi.getOrder().getPayDate())
+                    result+=oi.getNumber();
+        }
+        return result;
+    }
+
+    public List<OrderItem> listByProduct(Product product) {
+        return orderItemDAO.findByProduct(product);
     }
 
     public List<OrderItem> listByOrder(Order order) {
