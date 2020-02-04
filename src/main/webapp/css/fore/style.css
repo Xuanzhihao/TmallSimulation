@@ -633,7 +633,7 @@ div.productUnit a.productLink:hover {
 div.productUnit a.tmallLink {
 	margin: 10px 0px;
 	color: #999999;
-	font: 0.8em;
+	font-size: 0.8em;
 	display: block;
 	text-decoration: underline;
 }

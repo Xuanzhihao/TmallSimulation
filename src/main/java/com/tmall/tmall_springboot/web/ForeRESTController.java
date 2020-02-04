@@ -1,5 +1,6 @@
 package com.tmall.tmall_springboot.web;
 
+import com.tmall.tmall_springboot.comparator.*;
 import com.tmall.tmall_springboot.pojo.*;
 import com.tmall.tmall_springboot.service.*;
 import com.tmall.tmall_springboot.util.Result;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.HtmlUtils;
 
 import javax.servlet.http.HttpSession;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -97,5 +99,56 @@ public class ForeRESTController {
         map.put("reviews", reviews);
 
         return Result.success(map);
+    }
+
+    @GetMapping("forecheckLogin")
+    public Object checkLogin( HttpSession session) {
+        User user =(User)  session.getAttribute("user");
+        if(null!=user)
+            return Result.success();
+        return Result.fail("未登录");
+    }
+
+    @GetMapping("forecategory/{cid}")
+    public Object category(@PathVariable int cid,String sort) {
+        Category c = categoryService.get(cid);
+        productService.fill(c);
+        productService.setSaleAndReviewNumber(c.getProducts());
+        categoryService.removeCategoryFromProduct(c);
+
+        if(null!=sort){
+            switch(sort){
+                case "review":
+                    Collections.sort(c.getProducts(),new ProductReviewComparator());
+                    break;
+                case "date" :
+                    Collections.sort(c.getProducts(),new ProductDateComparator());
+                    break;
+
+                case "saleCount" :
+                    Collections.sort(c.getProducts(),new ProductSaleCountComparator());
+                    break;
+
+                case "price":
+                    Collections.sort(c.getProducts(),new ProductPriceComparator());
+                    break;
+
+                case "all":
+                    Collections.sort(c.getProducts(),new ProductAllComparator());
+                    break;
+            }
+        }
+
+        return c;
+    }
+
+    @PostMapping("foresearch")
+    public Object search( String keyword){
+        if(null==keyword)
+            keyword = "";
+        List<Product> ps= productService.search(keyword,0,20);
+        productImageService.setFirstProdutImages(ps);
+        productService.setSaleAndReviewNumber(ps);
+        return ps;
     }
 }
