@@ -5,6 +5,7 @@ import com.tmall.tmall_springboot.dao.OrderItemDAO;
 import com.tmall.tmall_springboot.pojo.Order;
 import com.tmall.tmall_springboot.pojo.OrderItem;
 import com.tmall.tmall_springboot.pojo.Product;
+import com.tmall.tmall_springboot.pojo.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -68,5 +69,9 @@ public class OrderItemService {
 
     public List<OrderItem> listByOrder(Order order) {
         return orderItemDAO.findByOrderOrderByIdDesc(order);
+    }
+
+    public List<OrderItem> listByUser(User user){
+        return orderItemDAO.findByUserAndOrderIsNull(user);
     }
 }
